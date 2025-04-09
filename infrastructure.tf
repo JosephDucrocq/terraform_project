@@ -14,7 +14,7 @@ resource "aws_elastic_beanstalk_environment" "example_app_environment" {
 
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
-    name      = "alydar_user"
+    name      = "IamInstanceProfile"
     value     = aws_iam_instance_profile.example_app_ec2_instance_profile.name
   }
 
