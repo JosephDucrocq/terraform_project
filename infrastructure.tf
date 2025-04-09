@@ -46,11 +46,6 @@ resource "aws_iam_role" "example_app_role" {
   })
 }
 
-resource "aws_iam_instance_profile" "example_app_ec2_instance_profile" {
-  name = "alydar-task-listing-app-ec2-instance-profile"
-  role = aws_iam_role.example_app_ec2_role.name
-}
-
 resource "aws_iam_role" "example_app_ec2_role" {
   name = "alydar-task-listing-app-ec2-instance-role"
 
