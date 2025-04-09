@@ -16,9 +16,3 @@ required_version = ">= 1.2.0"
 provider "aws" {
   region = "eu-west-2"
 }
-
-# Create an ECR repository
-resource "aws_ecr_repository" "my_repository" {
-  name = "alydarecr"  # Name of the repository you want to create
-}
-
