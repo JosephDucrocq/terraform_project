@@ -89,7 +89,7 @@ resource "aws_iam_role_policy_attachment" "example_app_ec2_role_policy_attachmen
 # Create an S3 bucket to store the Dockerrun.aws.json file
 resource "aws_s3_bucket" "dockerrun_bucket" {
   bucket = "alydar-dockerrun-bucket"  # You can change this name as needed
-  acl    = "private"
+  acl    = "public-read"
 }
 
 # Set the ACL for the S3 bucket using the aws_s3_bucket_acl resource
