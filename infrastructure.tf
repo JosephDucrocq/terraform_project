@@ -45,3 +45,28 @@ resource "aws_iam_role" "example_app_role" {
     ]
   })
 }
+
+resource "aws_iam_instance_profile" "example_app_ec2_instance_profile" {
+  name = "alydar-task-listing-app-ec2-instance-profile"
+  role = aws_iam_role.example_app_ec2_role.name
+}
+
+resource "aws_iam_role" "example_app_ec2_role" {
+  name = "alydar-task-listing-app-ec2-instance-role"
+
+  // Allows the EC2 instances in our EB environment to assume (take on) this 
+  // role.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+        {
+            Action = "sts:AssumeRole"
+            Principal = {
+               Service = "ec2.amazonaws.com"
+            }
+            Effect = "Allow"
+            Sid = ""
+        }
+    ]
+  })
+}
