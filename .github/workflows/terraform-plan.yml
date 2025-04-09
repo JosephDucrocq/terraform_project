@@ -31,7 +31,7 @@ jobs:
         name: terraform-plan
         path: tfplan
     - name: Show Terraform Plan in PR comment
-      uses: peter-evans/terraform-comment@v1.1.0
+      uses: peter-evans/terraform-comment@vmain  
       with:
         github_token: ${{ secrets.GB_TOKEN }}
         terraform_plan_path: tfplan
