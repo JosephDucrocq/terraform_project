@@ -86,9 +86,8 @@ resource "aws_iam_role_policy_attachment" "example_app_ec2_role_policy_attachmen
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-# Upload the Dockerrun.aws.json file to the S3 bucket
 resource "aws_s3_bucket_object" "dockerrun_json" {
-  bucket = alydar_bucket.dockerrun_bucket.bucket
+  bucket = "alydar-bucket"
   key    = "Dockerrun.aws.json"  # The key (file name) in the S3 bucket
   source = "path/to/Dockerrun.aws.json"  # Local path to the Dockerrun.aws.json file on your machine
   acl    = "private"
