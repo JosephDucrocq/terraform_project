@@ -83,5 +83,5 @@ resource "aws_iam_role_policy_attachment" "elastic_beanstalk_worker_tier" {
 
 resource "aws_iam_role_policy_attachment" "example_app_ec2_role_policy_attachment" {
   role       = aws_iam_role.example_app_ec2_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AContainerRegistryReadOnly"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
