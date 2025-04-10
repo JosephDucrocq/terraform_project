@@ -95,7 +95,7 @@ resource "aws_s3_bucket" "dockerrun_bucket" {
 resource "aws_db_instance" "rds_app" {
   allocated_storage    = 10
   engine               = "postgres"
-  engine_version       = "15.3"
+  engine_version       = "15.7"
   instance_class       = "db.t3.micro"
   identifier           = "alydar"
   name                 = "alydar_database"
