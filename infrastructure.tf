@@ -91,16 +91,4 @@ resource "aws_s3_bucket" "dockerrun_bucket" {
   bucket = "alydar-dockerrun-bucket"  # You can change this name as needed
 }
 
-# Set the ACL for the S3 bucket using the aws_s3_bucket_acl resource
-resource "aws_s3_bucket_acl" "dockerrun_bucket_acl" {
-  bucket = aws_s3_bucket.dockerrun_bucket.bucket
-  acl    = "private"
-}
 
-# Upload the Dockerrun.aws.json file to the S3 bucket using the aws_s3_object resource
-resource "aws_s3_object" "dockerrun_json" {
-  bucket = aws_s3_bucket.dockerrun_bucket.bucket
-  key    = "Dockerrun.aws.json"  # The key (file name) in the S3 bucket
-  source = "Dockerrun.aws.json"  # Ensure the correct local path here
-  acl    = "private"
-}
