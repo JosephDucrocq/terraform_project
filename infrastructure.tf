@@ -84,7 +84,7 @@ resource "aws_db_instance" "rds_app" {
   engine_version       = "15.7"
   instance_class       = "db.t3.micro"
   identifier           = "alydar"
-  name                 = "alydar_db"
+  db_name              = "alydar_database"
   username             = "root"
   password             = "password"
   skip_final_snapshot  = true
