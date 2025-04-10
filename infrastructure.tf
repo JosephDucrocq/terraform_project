@@ -84,7 +84,7 @@ resource "aws_db_instance" "rds_app" {
   engine_version       = "15.7"
   instance_class       = "db.t3.micro"
   identifier           = "alydar"
-  name                 = "db_name"
+  name                 = "alydar_db"
   username             = "root"
   password             = "password"
   skip_final_snapshot  = true
@@ -99,7 +99,7 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_HOST"
-    value     = db_name.default.endpoint  # Endpoint from RDS instance
+    value     = aws_db_instance.default.endpoint  # Endpoint from RDS instance
   }
   # DB_PORT from aws_db_instance
   setting {
