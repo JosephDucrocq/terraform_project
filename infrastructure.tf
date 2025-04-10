@@ -6,7 +6,7 @@ resource "aws_elastic_beanstalk_application" "example_app" {
   description = "Task listing app"
 }
 resource "aws_elastic_beanstalk_environment" "example_app_environment" {
-  name                = "alydarEB"
+  name                = "name-EB"
   application         = aws_elastic_beanstalk_application.example_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
   setting {
