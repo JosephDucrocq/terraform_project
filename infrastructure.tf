@@ -91,4 +91,16 @@ resource "aws_s3_bucket" "dockerrun_bucket" {
   bucket = "alydar-dockerrun-bucket"  # You can change this name as needed
 }
 
-
+# Create database
+resource "aws_db_instance" "rds_app" {
+  allocated_storage    = 10
+  engine               = "postgres"
+  engine_version       = "15.3"
+  instance_class       = "db.t3.micro"
+  identifier           = "alydar"
+  name                 = "<alydar_database"
+  username             = "root"
+  password             = "password"
+  skip_final_snapshot  = true
+  publicly_accessible = true
+}
