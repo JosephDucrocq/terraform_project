@@ -110,13 +110,13 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_NAME"
-    value     = aws_db_instance.default.db_name  # DB name from RDS instance
+    value     = aws_db_instance.rds_app.db_name  # DB name from RDS instance
   }
   # DB_USER from aws_db_instance
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_USER"
-    value     = aws_db_instance.default.username  # DB username from RDS instance
+    value     = aws_db_instance.rds_app.username  # DB username from RDS instance
   }
   # DB_PASSWORD from a secret manager or SSM (not directly from RDS for security reasons)
   setting {
