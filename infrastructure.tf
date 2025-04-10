@@ -95,11 +95,10 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   application         = "alydar-task-listing-app"
   environment_name    = "alydarEB"
   solution_stack_name = "64bit Amazon Linux 2 v3.3.6 running Node.js 14"
-  # DB_HOST from aws_db_instance
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_HOST"
-    value     = alydar_database.default.endpoint  # Endpoint from RDS instance
+    value     = aws_db_instance.rds_app.endpoint  # Endpoint from RDS instance
   }
   # DB_PORT from aws_db_instance
   setting {
@@ -111,13 +110,13 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_NAME"
-    value     = alydar_database.default.db_name  # DB name from RDS instance
+    value     = aws_db_instance.default.db_name  # DB name from RDS instance
   }
   # DB_USER from aws_db_instance
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_USER"
-    value     = alydar_database.default.username  # DB username from RDS instance
+    value     = aws_db_instance.default.username  # DB username from RDS instance
   }
   # DB_PASSWORD from a secret manager or SSM (not directly from RDS for security reasons)
   setting {
@@ -126,3 +125,4 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
     value     = data.aws_secretsmanager_secret.db_password.secret_string  # Use AWS Secrets Manager (preferred)
   }
 }
+  
