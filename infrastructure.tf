@@ -14,12 +14,12 @@ resource "aws_elastic_beanstalk_application" "example_app" {
 #     name      = "IamInstanceProfile"
 #     value     = aws_iam_instance_profile.example_app_ec2_instance_profile.name
 #   }
-  setting {
-    namespace = "aws:autoscaling:launchconfiguration"
-    name      = "EC2KeyName"
-    value     = "alydar_terraform_key"
-  }
-}
+#   setting {
+#     namespace = "aws:autoscaling:launchconfiguration"
+#     name      = "EC2KeyName"
+#     value     = "alydar_terraform_key"
+#   }
+# }
 resource "aws_iam_instance_profile" "example_app_ec2_instance_profile" {
   name = "example_app_ec2_instance_profile"
   role = aws_iam_role.example_app_role.name
