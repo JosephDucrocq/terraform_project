@@ -2,7 +2,7 @@ resource "aws_ecr_repository" "my_repository" {
   name = "alydarecr"  # Name of the repository you want to create
 }
 resource "aws_elastic_beanstalk_application" "example_app" {
-  name        = "alydar-task-listing-app"
+  name        = "alydar-task-listing-app2"
   description = "Task listing app"
 }
 # resource "aws_elastic_beanstalk_environment" "example_app_environment" {
@@ -86,7 +86,6 @@ resource "aws_db_instance" "rds_app" {
   instance_class       = "db.t3.micro"
   identifier           = "alydar"
   db_name              = "alydar_database"
-  environment_name     = "alydarEB"
   username             = "root"
   password             = "password"
   skip_final_snapshot  = true
@@ -107,9 +106,9 @@ resource "aws_secretsmanager_secret_version" "db_password_version" {
 
 
 resource "aws_elastic_beanstalk_environment" "app_environment" {
-  name                = "alydarEB"
-  application         = "alydar-task-listing-app"
-  solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
+  name                = "alydarEBS"
+  application         = "alydar-task-listing-app2"
+  solution_stack_name = "64bit Amazon Linux 2 v3.3.6 running Node.js 14"
   
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
