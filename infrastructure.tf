@@ -106,6 +106,7 @@ resource "aws_secretsmanager_secret_version" "db_password_version" {
 
 
 resource "aws_elastic_beanstalk_environment" "app_environment" {
+
   name                = "alydarEBS"
   application         = "alydar-task-listing-app2"
   solution_stack_name = "64bit Amazon Linux 2 v3.3.6 running Node.js 14"
