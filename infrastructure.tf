@@ -12,6 +12,12 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
 }
   
+
+
+resource "aws_secretsmanager_secret" "db_password" {
+  name        = "alydar-db-password-secret"  # Choose a unique name
+  description = "Database password for Alydar app"
+
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_HOST"
@@ -41,11 +47,6 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
     name      = "DB_PASSWORD"
     value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
   }
-
-
-resource "aws_secretsmanager_secret" "db_password" {
-  name        = "alydar-db-password-secret"  # Choose a unique name
-  description = "Database password for Alydar app"
 }
 
 resource "aws_secretsmanager_secret_version" "db_password_version" {
