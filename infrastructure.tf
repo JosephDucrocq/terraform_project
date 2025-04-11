@@ -125,7 +125,7 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_NAME"
-    value     = aws_db_instance.rds_app.db_name  # DB name from RDS instance
+    value     = aws_db_instance.rds_app.db_name  # DB name from RDS instanc
   }
   # DB_USER from aws_db_instance
   setting {
