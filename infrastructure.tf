@@ -5,6 +5,56 @@ resource "aws_elastic_beanstalk_application" "example_app" {
   name        = "alydar-task-listing-app2"
   description = "Task listing app"
 }
+
+resource "aws_secretsmanager_secret" "db_password" {
+  name        = "alydar-db-password-secret"  # Choose a unique name
+  description = "Database password for Alydar app"
+}
+
+resource "aws_secretsmanager_secret_version" "db_password_version" {
+  secret_id     = aws_secretsmanager_secret.db_password.id
+  secret_string = jsonencode({
+    password = "alydar123!"  # Replace with your actual password or variable
+  })
+}
+
+
+resource "aws_elastic_beanstalk_environment" "app_environment" {
+  name                = "alydarEBS"
+  application         = "alydar-task-listing-app2"
+  solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
+  
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_HOST"
+    value     = aws_db_instance.rds_app.endpoint  # Endpoint from RDS instance
+  }
+  # DB_PORT from aws_db_instance
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_PORT"
+    value     = "5432"  # Default PostgreSQL port
+  }
+  # DB_NAME from aws_db_instance
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_NAME"
+    value     = aws_db_instance.rds_app.db_name  # DB name from RDS instanc
+  }
+  # DB_USER from aws_db_instance
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_USER"
+    value     = aws_db_instance.rds_app.username  # DB username from RDS instance
+  }
+  # DB_PASSWORD from a secret manager or SSM (not directly from RDS for security reasons)
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "DB_PASSWORD"
+    value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
+  }
+}
+
 # resource "aws_elastic_beanstalk_environment" "example_app_environment" {
 #   name                = "name-EB"
 #   application         = aws_elastic_beanstalk_application.example_app.name
@@ -92,53 +142,4 @@ resource "aws_db_instance" "rds_app" {
   publicly_accessible = true
 }
 
-resource "aws_secretsmanager_secret" "db_password" {
-  name        = "alydar-db-password-secret"  # Choose a unique name
-  description = "Database password for Alydar app"
-}
 
-resource "aws_secretsmanager_secret_version" "db_password_version" {
-  secret_id     = aws_secretsmanager_secret.db_password.id
-  secret_string = jsonencode({
-    password = "alydar123!"  # Replace with your actual password or variable
-  })
-}
-
-
-resource "aws_elastic_beanstalk_environment" "app_environment" {
-
-  name                = "alydarEBS"
-  environment_name    = "alydarenv"
-  application         = "alydar-task-listing-app2"
-  solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
-  
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "DB_HOST"
-    value     = aws_db_instance.rds_app.endpoint  # Endpoint from RDS instance
-  }
-  # DB_PORT from aws_db_instance
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "DB_PORT"
-    value     = "5432"  # Default PostgreSQL port
-  }
-  # DB_NAME from aws_db_instance
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "DB_NAME"
-    value     = aws_db_instance.rds_app.db_name  # DB name from RDS instanc
-  }
-  # DB_USER from aws_db_instance
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "DB_USER"
-    value     = aws_db_instance.rds_app.username  # DB username from RDS instance
-  }
-  # DB_PASSWORD from a secret manager or SSM (not directly from RDS for security reasons)
-  setting {
-    namespace = "aws:elasticbeanstalk:application:environment"
-    name      = "DB_PASSWORD"
-    value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
-  }
-}
