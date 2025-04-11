@@ -135,7 +135,7 @@ resource "aws_secretsmanager_secret_version" "db_password_version" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_PASSWORD"
-    value     = data.aws_secretsmanager_secret.db_password.secret_string  # Use AWS Secrets Manager (preferred)
+    value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
   }
 }
   
