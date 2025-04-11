@@ -6,22 +6,9 @@ resource "aws_elastic_beanstalk_application" "example_app" {
   description = "Task listing app"
 }
 
-resource "aws_secretsmanager_secret" "db_password" {
-  name        = "alydar-db-password-secret"  # Choose a unique name
-  description = "Database password for Alydar app"
-}
-
-resource "aws_secretsmanager_secret_version" "db_password_version" {
-  secret_id     = aws_secretsmanager_secret.db_password.id
-  secret_string = jsonencode({
-    password = "alydar123!"  # Replace with your actual password or variable
-  })
-}
-
-
 resource "aws_elastic_beanstalk_environment" "app_environment" {
   name                = "alydarEBS"
-  application         = "alydar-task-listing-app2"
+  application         = aws_elastic_beanstalk_application.example_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
   
   setting {
@@ -54,6 +41,19 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
     value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
   }
 }
+
+resource "aws_secretsmanager_secret" "db_password" {
+  name        = "alydar-db-password-secret"  # Choose a unique name
+  description = "Database password for Alydar app"
+}
+
+resource "aws_secretsmanager_secret_version" "db_password_version" {
+  secret_id     = aws_secretsmanager_secret.db_password.id
+  secret_string = jsonencode({
+    password = "alydar123!"  # Replace with your actual password or variable
+  })
+}
+
 
 # resource "aws_elastic_beanstalk_environment" "example_app_environment" {
 #   name                = "name-EB"
