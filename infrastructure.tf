@@ -50,7 +50,7 @@ resource "aws_iam_role" "example_app_ec2_role" {
         {
             Action = "sts:AssumeRole"
             Principal = {
-               Service = "ec2.amazonaws.com"
+            Service = "ec2.amazonaws.com"
             }
             Effect = "Allow"
             Sid = ""
@@ -108,6 +108,7 @@ resource "aws_secretsmanager_secret_version" "db_password_version" {
 resource "aws_elastic_beanstalk_environment" "app_environment" {
   name                = "alydarEB"
   application         = "alydar-task-listing-app"
+  environment_name    = "alydarEB"
   solution_stack_name = "64bit Amazon Linux 2 v3.3.6 running Node.js 14"
   
   setting {
