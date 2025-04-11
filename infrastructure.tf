@@ -91,6 +91,19 @@ resource "aws_db_instance" "rds_app" {
   publicly_accessible = true
 }
 
+resource "aws_secretsmanager_secret" "db_password" {
+  name        = "alydar-db-password-secret"  # Choose a unique name
+  description = "Database password for Alydar app"
+}
+
+resource "aws_secretsmanager_secret_version" "db_password_version" {
+  secret_id     = aws_secretsmanager_secret.db_password.id
+  secret_string = jsonencode({
+    password = "alydar123!"  # Replace with your actual password or variable
+  })
+}
+  
+
 resource "aws_elastic_beanstalk_environment" "app_environment" {
   name                = "alydarEB"
   application         = "alydar-task-listing-app"
@@ -102,19 +115,6 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
     name      = "DB_HOST"
     value     = aws_db_instance.rds_app.endpoint  # Endpoint from RDS instance
   }
-}
-
-resource "aws_secretsmanager_secret" "db_password" {
-  name        = "alydar-db-password-secret"  # Choose a unique name
-  description = "Database password for Alydar app"
-}
-
-resource "aws_secretsmanager_secret_version" "db_password_version" {
-  secret_id     = aws_secretsmanager_secret.db_password.id
-  secret_string = jsonencode({
-    password = "alydar123!"  # Replace with your actual password or variable
-  })
-
   # DB_PORT from aws_db_instance
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -137,7 +137,6 @@ resource "aws_secretsmanager_secret_version" "db_password_version" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "DB_PASSWORD"
-    value     = jsondecode(aws_secretsmanager_secret.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
+    value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
   }
 }
-  
