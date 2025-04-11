@@ -10,13 +10,17 @@ resource "aws_elastic_beanstalk_environment" "app_environment" {
   name                = "alydarEBS"
   application         = aws_elastic_beanstalk_application.example_app.name
   solution_stack_name = "64bit Amazon Linux 2023 v4.0.1 running Docker"
-}
   
-
-
-resource "aws_secretsmanager_secret" "db_password" {
-  name        = "alydar-db-password-secret"  # Choose a unique name
-  description = "Database password for Alydar app"
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = aws_iam_instance_profile.example_app_ec2_instance_profile.name
+   }
+   setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "EC2KeyName"
+    value     = "alydar_terraform_key"
+  }
 
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
@@ -47,6 +51,11 @@ resource "aws_secretsmanager_secret" "db_password" {
     name      = "DB_PASSWORD"
     value     = jsondecode(aws_secretsmanager_secret_version.db_password_version.secret_string)["password"] # Use AWS Secrets Manager (preferred)
   }
+}
+
+resource "aws_secretsmanager_secret" "db_password" {
+  name        = "alydar-db-password-secret"  # Choose a unique name
+  description = "Database password for Alydar app"
 }
 
 resource "aws_secretsmanager_secret_version" "db_password_version" {
